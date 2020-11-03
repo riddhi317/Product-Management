@@ -3,52 +3,131 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
   {% block meta %}{% endblock %}
-  <title>{% block title %}Demo Products{% endblock %}</title>
-  <script src="https://use.fontawesome.com/1858093244.js"></script>
 
-  <link rel="stylesheet" type="text/css"
-    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
-  <meta charset="UTF-8" />
-  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0" name="viewport">
-  <meta name="twitter:widgets:theme" content="light">
-  <meta property="og:title" content="Demo" />
-  <meta property="og:type" content="website" />
-  <meta property="og:description" content="Sign in to demo product page" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 
-  <!-- <link rel="stylesheet" href="{% static 'css/product.css' %}" /> -->
+  <title>Pixie - Ecommerce HTML5 Template</title>
 
-  <style>
-  </style>
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
+  <!-- Additional CSS Files -->
+
+  <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tooplate-main.css' %}">
+
+  <!--
+Tooplate 2114 Pixie
+https://www.tooplate.com/view/2114-pixie
+-->
 </head>
-<header>
+
+<body>
+  <!-- Pre Header -->
+  <div id="pre-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <span>Suspendisse laoreet magna vel diam lobortis imperdiet</span>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- navbar-->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <!-- Navbar content -->
-    <a class="navbar-brand" href="{% url 'home' %}">Demo Project</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        {% if user.is_authenticated %}
-        <a class="nav-item nav-link active" href="{% url 'home' %}">Home</a>
-        <a class="nav-item nav-link active" href="{% url 'product' %}">Product</a>
-        <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-        {% else %}
-        <a class="nav-item nav-link" href="{% url 'login' %}">Log in</a>
-        <a class="nav-item nav-link" href="{% url 'signup' %}">Sign up</a>
-        {% endif %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img src="{% static 'images/header-logo.png' %}" alt=""></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+          <a class="nav-item nav-link " href="{% url 'home' %}">Home</a>
+          <a class="nav-item nav-link " href="{% url 'product' %}">Product</a>
+          <a class="nav-item nav-link " href="{% url 'category' %}">Category</a>
+          <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+          {% else %}
+          <a class="nav-item nav-link" href="{% url 'login' %}">Log in</a>
+          <a class="nav-item nav-link" href="{% url 'signup' %}">Sign up</a>
+          {% endif %}
+        </ul>
       </div>
     </div>
   </nav>
 
-  <br>
   {% block content %}
 
   {% endblock %}
+
+  <div class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="logo">
+            <img src="{% static 'images/header-logo.png' %}" alt="">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="footer-menu">
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Help</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">How It Works ?</a></li>
+              <li><a href="#">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="social-icons">
+            <ul>
+              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+              <li><a href="#"><i class="fa fa-rss"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer Ends Here -->
+
+
+  <!-- Sub Footer Starts Here -->
+  <div class="sub-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="copyright-text">
+            <p>Copyright &copy; 2019 Company Name
+
+              - Design: <a rel="nofollow" href="https://www.facebook.com/tooplate">Tooplate</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script language="text/Javascript">
+    cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+    function clearField(t) {                   //declaring the array outside of the
+      if (!cleared[t.id]) {                      // function makes it static and global
+        cleared[t.id] = 1;  // you could use true and false, but that's more typing
+        t.value = '';         // with more chance of typos
+        t.style.color = '#fff';
+      }
+    }
+  </script>
+</body>
 
 </html>

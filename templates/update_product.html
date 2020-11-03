@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="contact-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>Update Product</h1>
+        </div>
+      </div>
+      <div class="col-md-12 alert hidden" id="alert"></div>
+
+      <div class="col-md-6">
+        <div id="map">
+          <img src="{% static 'images/update.jpg' %}" alt="Item 1" width="100%"></img>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="right-content">
+          <div class="container">
+            <form id="contact" action="" method="post">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6">
+                  <fieldset>
+                    <input type="text" id="name" name="name" class="form-control" value="{{product.name}}" />
+
+                  </fieldset>
+                </div>
+                <div class="col-md-6">
+                  <fieldset>
+                    <input type="text" id="product_code" name="product_code" class="form-control"
+                      value="{{product.product_code}}" />
+                  </fieldset>
+                </div>
+                <div class="col-md-6">
+                  <fieldset>
+                    <input type="text" id="price" name="price" class="form-control" value="{{product.price}}" />
+                  </fieldset>
+                </div>
+                <div class="col-md-6">
+                  <fieldset>
+                    <select name="category" id="category" class="form-control">
+                      {% for obj in category_list %}
+                      {% if obj.name == product.category.name %}
+                      <option value="{{obj.id}}" selected>{{obj.name}}</option>
+                      {% else %}
+                      <option value="{{obj.id}}">{{obj.name}}</option>
+                      {% endif %}
+                      {% endfor %}
+
+                    </select>
+                  </fieldset>
+                </div>
+                <div class="col-md-6">
+                  <fieldset>
+                    <input type="text" readonly id="manufacture_date" name="manufacture_date" class="form-control"
+                      value='{{product.manufacture_date|date:"M d, Y" }}' />
+                  </fieldset>
+                </div>
+                <div class="col-md-6">
+                  <fieldset>
+                    <input type="text" readonly id="expiry_date" name="expiry_date" class="form-control"
+                      value='{{product.expiry_date|date:"M d, Y" }}' />
+                  </fieldset>
+                </div>
+                <div class="col-md-6">
+                  <fieldset>
+                    <select name="product_owner" id="product_owner" class="form-control">
+                      {% for obj in user_list %}
+                      {% if obj.username == product.product_owner.username %}
+                      <option value="{{obj.id}}" selected>{{obj.username}}</option>
+                      {% else %}
+                      <option value="{{obj.id}}">{{obj.username}}</option>
+                      {% endif %}
+                      {% endfor %}
+
+                    </select>
+                  </fieldset>
+                </div>
+                <div class="col-md-12">
+                  <fieldset>
+                    <button id="form-submit" class="update button">Update</button>
+                  </fieldset>
+                </div>
+                <div class="col-md-12">
+                  <div class="share">
+                    <h6>You can also keep in touch on: <span><a href="#"><i class="fa fa-facebook"></i></a><a
+                          href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i
+                            class="fa fa-twitter"></i></a></span></h6>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(".update").on('click', function () {
+    debugger;
+    var newData = new FormData();
+    newData.append('name', $("#name").val())
+    newData.append('product_code', $("#product_code").val())
+    newData.append('price', $("#price").val())
+    newData.append('category', $("#category").val())
+    newData.append('product_owner', $("#product_owner").val())
+    newData.append('manufacture_date', $("input[name=manufacture_date]").val())
+    newData.append('expiry_date', $("input[name=expiry_date]").val())
+    $.ajax({
+      contentType: 'json',
+
+      url: "{% url 'update_product' p_id=product.id %}",
+      type: "POST",
+      data: newData,
+      success: function (response, data) {
+        debugger
+        if (response['data'] == 'success') {
+          $("#alert").removeClass("hidden");
+          $("#alert").removeClass("alert-danger");
+          $("#alert").addClass("alert-success");
+          $("#alert").empty();
+          $("#alert").append("<p><strong>" + response['message'] + "</strong></p>");
+          setTimeout(function () {
+            document.location.reload()
+          }, 3000);
+        }
+        else if (response['data'] == 'Failed') {
+          $("#alert").removeClass("hidden");
+          $("#alert").removeClass("alert-success");
+          $("#alert").addClass("alert-danger");
+          $("#alert").empty();
+          $("#alert").append("<p><strong>" + response['message'] + "</strong></p>");
+          setTimeout(function () {
+            document.location.reload()
+          }, 3000);
+        }
+
+      },
+      error: function (result) {
+        alert('error');
+      }
+    });
+  });
+
+</script>
+{% endblock %}

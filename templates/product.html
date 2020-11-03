@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    a.createlink {
+        padding: 12px;
+        color: #ece2e2;
+        background: black;
+        margin: 12px 0;
+    }
+
+    input#product_code,
+    input#price {
+        width: 103px;
+    }
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="about-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <div class="line-dec"></div>
+                    <h1>Welcome, {{ user.username }}!</h1>
+                </div>
+            </div>
+            <div class="col-md-12 alert hidden" id="alert"></div>
+            <div class="col-md-12">
+                {% if request.user.is_superuser %}
+                <p> <a class="createlink" href="{% url 'create_product' %}">Create Product</a>
+                </p>
+                {% endif %}
+            </div>
+            {% if product_list %}
+            <div class="col-md-12">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Product code</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Manufacture date</th>
+                            <th>Expiry date</th>
+                            <th>Product owner</th>
+                            {% if request.user.is_superuser %}
+                            <th>Edit/Delete</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in product_list %}
+                        <tr>
+                            <td>{{product.name}}</td>
+                            <td>{{product.product_code}}</td>
+                            <td>{{product.price}}</td>
+                            <td>{{product.category.name}}</td>
+                            <td>{{product.manufacture_date|date:"M d, Y" }}</td>
+                            <td>{{product.expiry_date|date:"M d, Y" }}</td>
+                            <td>{{product.product_owner}}</td>
+                            {% if request.user.is_superuser %}
+                            <td id="{{product.id}}">
+                                <a class="update" id="{{product.id}}" href="{% url 'update_product' p_id=product.id %}">
+                                    Edit</a>/
+                                <a class="deletelink" href="#">Delete</a></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Product code</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Start date</th>
+                            <th>Expiry date</th>
+                            <th>Product owner</th>
+                            {% if request.user.is_superuser %}
+                            <th>Edit/Delete</th>
+                            {% endif %}
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            {% else %}
+            <div class="col-md-12">
+                <div class="jumbotron text-center">
+                    <h1>No Product Is Available </h1>
+                    <p>You can add product on click of "Create Product" button</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
+</script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js">
+</script>
+<script>
+    $(document).ready(function () {
+
+        $('#example').DataTable();
+    });
+
+    var getCookie = function (name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    $(".deletelink").on('click', function () {
+        debugger;
+
+        var product_id = this.parentElement.attributes.id.value
+        var data = { 'product_id': product_id, 'csrfmiddlewaretoken': getCookie('csrftoken') }
+
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: "{% url 'delete' %}",
+            data: data,
+            success: function (response, data) {
+                debugger
+                if (response['data'] == 'success') {
+                    $("#alert").removeClass("hidden");
+                    $("#alert").removeClass("alert-danger");
+                    $("#alert").addClass("alert-success");
+                    $("#alert").empty();
+                    $("#alert").append("<p><strong>" + response['message'] + "</strong></p>");
+                    setTimeout(function () {
+                        document.location.reload()
+                    }, 3000);
+                }
+                else if (response['data'] == 'Failed') {
+                    $("#alert").removeClass("hidden");
+                    $("#alert").removeClass("alert-success");
+                    $("#alert").addClass("alert-danger");
+                    $("#alert").empty();
+                    $("#alert").append("<p><strong>" + response['message'] + "</strong></p>");
+                    setTimeout(function () {
+                        document.location.reload()
+                    }, 3000);
+                }
+
+            },
+
+
+            error: function (result) {
+                alert('error');
+            }
+        });
+    });
+</script>
+<style>
+    div#example_wrapper {
+        overflow: auto;
+    }
+</style>
+
+{% endblock %}

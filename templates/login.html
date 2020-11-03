@@ -1,36 +1,65 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<div class=container>
-  <div class=row>
-    <h2>Login</h2>
-    </div>
-  
-  <div class=row>
-    
-<br>
-{% if form.errors %}
-<p style="color: red">Your username and password didn't match. Please try again.</p>
-{% endif %}
-<form method="post">
-  {% csrf_token %}
-  <input type="hidden" name="next" value="{{ next }}" />
-  {% for field in form %}
-  <p>
-    {{ field.label_tag }}<br>
-    {{ field }}<br>
-    {% for error in field.errors %}
-  <p style="color: red">{{ error }}</p>
-  {% endfor %}
-  {% if field.help_text %}
-  <p><small style="color: grey">{{ field.help_text }}</small></p>
-  {% endif %}
-  </p>
-  {% endfor %}
-  <button type="submit">Log in</button>
-  <a href="{% url 'signup' %}">New to My Site? Sign up</a>
-</form>
-</div>
-</div>
+<div class="contact-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>Login Form</h1>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div id="map">
+          <img src="{% static 'images/login.jpeg' %}" alt="Item 1" width="100%"></img>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="right-content">
+          <div class="container">
+            <form id="contact" action="" method="post">
+              {% csrf_token %}
+              <div class="row">
+                {% for message in messages %}
+                <div class="alert alert-danger">
+                  <a class="close" href="#" data-dismiss="alert"></a>
+                  {{ message }}
+                </div>
+                {% endfor %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <div class="col-md-12">
+                  <fieldset>
+                    <input type="text" placeholder="Username" name="username" autofocus="" class="form-control"
+                      required="" id="id_username" maxlength="254">
+                  </fieldset>
+                </div>
+                <div class="col-md-12">
+                  <fieldset>
+                    <input type="password" placeholder="Password" name="password" class="form-control" required=""
+                      id="id_password" maxlength="254">
+                  </fieldset>
+                </div>
 
+                <div class="col-md-12">
+                  <fieldset>
+                    <button type="submit" class="button">Log in</button>
+                    <a href="{% url 'signup' %}">New to My Site? Sign up</a>
+                  </fieldset>
+                </div>
+                <div class="col-md-12">
+                  <div class="share">
+                    <h6>You can also keep in touch on: <span><a href="#"><i class="fa fa-facebook"></i></a><a
+                          href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i
+                            class="fa fa-twitter"></i></a></span></h6>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
